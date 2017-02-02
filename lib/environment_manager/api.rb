@@ -111,14 +111,14 @@ module EnvironmentManager
     end
 
     public
-    def post_accounts_config(data={})
+    def post_accounts_config(data=Hash.new)
       # Add an association to an AWS Account
       request_endpoint = "/api/v1/config/accounts"
       return query(request_endpoint, query_type: "POST", data: data)
     end
 
     public
-    def put_account_config(accountnumber=nil, data={})
+    def put_account_config(accountnumber=nil, data=Hash.new)
       # Update an associated AWS Account
       if accountnumber.nil?
         raise("acountnumber has not been specified")
@@ -169,7 +169,7 @@ module EnvironmentManager
     end
 
     public
-    def put_asg(environment=nil, asgname=nil, data={})
+    def put_asg(environment=nil, asgname=nil, data=Hash.new)
       # Update properties of an ASG
       if environment.nil? or asgname.nil?
         raise("Either environment or asgname has not been specified")
@@ -219,7 +219,7 @@ module EnvironmentManager
     end
 
     public
-    def put_asg_scaling_schedule(environment=nil, asgname=nil, data={})
+    def put_asg_scaling_schedule(environment=nil, asgname=nil, data=Hash.new)
       # Update scaling schedule actions for given ASG
       if environment.nil? or asgname.nil?
         raise("Either environment or asgname has not been specified")
@@ -229,7 +229,7 @@ module EnvironmentManager
     end
 
     public
-    def put_asg_size(environment=nil, asgname=nil, data={})
+    def put_asg_size(environment=nil, asgname=nil, data=Hash.new)
       # Resize an ASG in the given environment
       if environment.nil? or asgname.nil?
         raise("Either environment or asgname has not been specified")
@@ -249,7 +249,7 @@ module EnvironmentManager
     end
 
     public
-    def put_asg_launch_config(environment=nil, asgname=nil, data={})
+    def put_asg_launch_config(environment=nil, asgname=nil, data=Hash.new)
       # Update the launch config associated with an ASG in the given environment
       if environment.nil? or asgname.nil?
         raise("Either environment or asgname has not been specified")
@@ -260,25 +260,25 @@ module EnvironmentManager
 
     ## Audit
     public
-    def get_audit_config(since=nil, until=nil)
+    def get_audit_config(since_time=nil, until_time=nil)
       # Get Audit Logs for a given time period. Default values are "since yesterday" and "until now"
-      if since.nil?
-        since_qs = ""
+      if since_time.nil?
+        since_time_qs = ""
       else
-        since_qs = "since=#{since}"
+        since_time_qs = "since=#{since_time}"
       end
-      if until.nil?
-        until_qs = ""
+      if until_time.nil?
+        until_time_qs = ""
       else
-        until_qs = "until=#{until}"
+        until_time_qs = "until=#{until_time}"
       end
       # Construct qs
-      if since.nil? and not until.nil?
-        constructed_qs = "?#{until_qs}"
-      elsif not since.nil? and until.nil?
-        constructed_qs = "?#{since_qs}"
-      elsif not since.nil? and not until.nil?
-        constructed_qs = "?#{since_qs}&#{until_qs}"
+      if since_time.nil? and not until_time.nil?
+        constructed_qs = "?#{until_time_qs}"
+      elsif not since_time.nil? and until_time.nil?
+        constructed_qs = "?#{since_time_qs}"
+      elsif not since_time.nil? and not until_time.nil?
+        constructed_qs = "?#{since_time_qs}&#{until_qs}"
       else
         constructed_qs = ""
       end
@@ -305,7 +305,7 @@ module EnvironmentManager
     end
 
     public
-    def post_clusters_config(data={})
+    def post_clusters_config(data=Hash.new)
       # Create a Cluster configuration
       request_endpoint = "/api/v1/config/clusters"
       return query(request_endpoint, query_type: "POST", data: data)
@@ -322,7 +322,7 @@ module EnvironmentManager
     end
 
     public
-    def put_cluster_config(cluster=nil, data={})
+    def put_cluster_config(cluster=nil, data=Hash.new)
       # Update a Cluster configuration
       if cluster.nil?
         raise("Cluster name has not been specified")
@@ -350,7 +350,7 @@ module EnvironmentManager
     end
 
     public
-    def post_deployments(dry_run=False, data={})
+    def post_deployments(dry_run=False, data=Hash.new)
       # Create a new deployment. This will provision any required infrastructure and update the required target-state
       request_endpoint = "/api/v1/deployments?dry_run=#{dry_run}"
       return query(request_endpoint, query_type: "POST", data: data)
@@ -367,7 +367,7 @@ module EnvironmentManager
     end
 
     public
-    def patch_deployment(deployment_id=nil, data={})
+    def patch_deployment(deployment_id=nil, data=Hash.new)
       # Modify deployment - cancel in-progress, or modify Action
       if deployment_id.nil?
         raise("Deployment id has not been specified")
@@ -398,7 +398,7 @@ module EnvironmentManager
     end
 
     public
-    def post_deployment_maps(data={})
+    def post_deployment_maps(data=Hash.new)
       # Create a deployment map configuration
       request_endpoint = "/api/v1/config/deployments-maps"
       return query(request_endpoint, query_type: "POST", data: data)
@@ -415,7 +415,7 @@ module EnvironmentManager
     end
 
     public
-    def put_deployment_map(deployment_name=nil, expected_version=nil, data={})
+    def put_deployment_map(deployment_name=nil, expected_version=nil, data=Hash.new)
       # Update a deployment map configuration
       if deployment_name.nil?
         raise("Deployment name has not been specified")
@@ -498,7 +498,7 @@ module EnvironmentManager
     end
 
     public
-    def put_environment_schedule(environment=nil, expected_version=nil, data={})
+    def put_environment_schedule(environment=nil, expected_version=nil, data=Hash.new)
       # Set the schedule for an environment
       if environment.nil?
         raise("Environment has not been specified")
@@ -565,7 +565,7 @@ module EnvironmentManager
     end
 
     public
-    def post_environments_config(data={})
+    def post_environments_config(data=Hash.new)
       # Create a new environment configuration
       request_endpoint = "/api/v1/config/environments"
       return query(request_endpoint, query_type: "POST", data: data)
@@ -582,7 +582,7 @@ module EnvironmentManager
     end
 
     public
-    def put_environment_config(environment=nil, expected_version=nil, data={})
+    def put_environment_config(environment=nil, expected_version=nil, data=Hash.new)
       # Update an environment configuration
       if environment.nil?
         raise("Environment has not been specified")
@@ -615,7 +615,7 @@ module EnvironmentManager
     end
 
     public
-    def post_environmenttypes_config(data={})
+    def post_environmenttypes_config(data=Hash.new)
       # Create an Environment Type configuration
       request_endpoint = "/api/v1/config/environment-types"
       return query(request_endpoint, query_type: "POST", data: data)
@@ -632,7 +632,7 @@ module EnvironmentManager
     end
 
     public
-    def put_environmenttype_config(environmenttype=nil, expected_version=nil, data={})
+    def put_environmenttype_config(environmenttype=nil, expected_version=nil, data=Hash.new)
       # Update an environment type configuration
       if environmenttype.nil?
         raise("Environment type has not been specified")
@@ -669,7 +669,7 @@ module EnvironmentManager
 
     ## Import
     public
-    def import_resource(resource=nil, account=nil, mode=nil, data={})
+    def import_resource(resource=nil, account=nil, mode=nil, data=Hash.new)
       # Import a configuration resources dynamo table
       if resource.nil? or account.nil? or mode.nil?
         raise("Resource or account has not been specified")
@@ -707,7 +707,7 @@ module EnvironmentManager
     end
 
     public
-    def put_instance_maintenance(instance_id=nil, data={})
+    def put_instance_maintenance(instance_id=nil, data=Hash.new)
       # Update the ASG standby-state of a given instance
       if instance_id.nil?
         raise("Instance id has not been specified")
@@ -718,7 +718,7 @@ module EnvironmentManager
 
     ## Load Balancers
     public
-    def get_loadbalancer(id=id)
+    def get_loadbalancer(id=nil)
       # Get load balancer data
       if id.nil?
         raise("Load Balancer ID has not been specified")
@@ -735,7 +735,7 @@ module EnvironmentManager
     end
 
     public
-    def post_lbsettings_config(data={})
+    def post_lbsettings_config(data=Hash.new)
       # Create a load balancer setting
       request_endpoint = "/api/v1/config/lb-settings"
       return query(request_endpoint, query_type: "POST", data: data)
@@ -755,7 +755,7 @@ module EnvironmentManager
     end
 
     public
-    def put_lbsettings_vhost_config(environment=nil, vhostname=nil, expected_version=nil, data={})
+    def put_lbsettings_vhost_config(environment=nil, vhostname=nil, expected_version=nil, data=Hash.new)
       # Update a load balancer setting
       if environment.nil?
         raise("Environment has not been specified")
@@ -794,7 +794,7 @@ module EnvironmentManager
     end
 
     public
-    def post_notificationsettings_config(data={})
+    def post_notificationsettings_config(data=Hash.new)
       # Post new Notification settings
       request_endpoint = "/api/v1/config/notification-settings"
       return query(request_endpoint, query_type: "POST", data: data)
@@ -811,7 +811,7 @@ module EnvironmentManager
     end
 
     public
-    def put_notificationsetting_config(notification_id=nil, expected_version=nil, data={})
+    def put_notificationsetting_config(notification_id=nil, expected_version=nil, data=Hash.new)
       # Update an associated AWS Account
       if notification_id.nil?
         raise("Notification id has not been specified")
@@ -866,7 +866,7 @@ module EnvironmentManager
     end
 
     public
-    def post_permissions_config(data={})
+    def post_permissions_config(data=Hash.new)
       # Create a new permission configuration"""
       request_endpoint = "/api/v1/config/permissions"
       return query(request_endpoint, query_type: "POST", data: data)
@@ -883,7 +883,7 @@ module EnvironmentManager
     end
 
     public
-    def put_permission_config(name=nil, expected_version=nil, data={})
+    def put_permission_config(name=nil, expected_version=nil, data=Hash.new)
       # Update a permission configuration
       if name.nil?
         raise("Permission name has not been specified")
@@ -1012,7 +1012,7 @@ module EnvironmentManager
     end
 
     public
-    def post_services_config(data={})
+    def post_services_config(data=Hash.new)
       # Create a service configuration
       request_endpoint = "/api/v1/config/services"
       return query(request_endpoint, query_type: "POST", data: data)
@@ -1032,7 +1032,7 @@ module EnvironmentManager
     end
 
     public
-    def put_service_config(service=nil, cluster=nil, expected_version=nil, data={})
+    def put_service_config(service=nil, cluster=nil, expected_version=nil, data=Hash.new)
       # Update a service configuration
       if service.nil?
         raise("Service has not been specified")
@@ -1046,7 +1046,7 @@ module EnvironmentManager
         headers = {"expected-version": expected_version}
       end
       request_endpoint = "/api/v1/config/services/#{service}/#{cluster}"
-      return query(request_endpoint, query_type: "POST", data=data, headers=headers)
+      return query(request_endpoint, query_type: "POST", data: data, headers: headers)
     end
 
     public
@@ -1140,7 +1140,7 @@ module EnvironmentManager
     end
 
     public
-    def post_upstreams_config(data={})
+    def post_upstreams_config(data=Hash.new)
       # Create an upstream configuration
       request_endpoint = "/api/v1/config/upstreams"
       return query(request_endpoint, query_type: "POST", data: data)
@@ -1157,7 +1157,7 @@ module EnvironmentManager
     end
 
     public
-    def put_upstream_config(upstream=nil, expected_version=nil, data={})
+    def put_upstream_config(upstream=nil, expected_version=nil, data=Hash.new)
       # Update an upstream configuration
       if upstream.nil?
         raise("Upstream name has not been specified")
