@@ -385,7 +385,7 @@ module EnvironmentManager
       if instance.nil?
         raise("Instance id has not been specified")
       end
-      request_endpoint = "/api/v1/deployments/#{deployment_id}/log?account=#{account},instance=#{instance}"
+      request_endpoint = "/api/v1/deployments/#{deployment_id}/log?account=#{account}&instance=#{instance}"
       return query(request_endpoint, query_type: "GET")
     end
 
@@ -674,7 +674,7 @@ module EnvironmentManager
       if resource.nil? or account.nil? or mode.nil?
         raise("Resource or account has not been specified")
       end
-      request_endpoint = "/api/v1/config/import/#{resource}?account=#{account},mode=#{mode}"
+      request_endpoint = "/api/v1/config/import/#{resource}?account=#{account}&mode=#{mode}"
       return query(request_endpoint, query_type: "PUT", data: data)
     end
 
