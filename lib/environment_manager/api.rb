@@ -139,14 +139,14 @@ module EnvironmentManager
 
     ## AMI
     public
-    def get_images_config(account=nil)
+    def get_images(account=nil)
       # Get the list of available AMI images. Only those that are privately published under associated accounts are included
       if account.nil?
         account_qs = ""
       else
         account_qs = "?account=#{account}"
       end
-      request_endpoint = "/api/v1/config/images#{account_qs}"
+      request_endpoint = "/api/v1/images#{account_qs}"
       return query(request_endpoint, query_type: "GET")
     end
 
@@ -1000,7 +1000,7 @@ module EnvironmentManager
       if environment.nil?
         raise("Environment has not been specified")
       end
-      request_endpoint = "/api/v1/services/#{service}/slices"
+      request_endpoint = "/api/v1/services/#{service}/slices/toggle?environment=#{environment}"
       return query(request_endpoint, query_type: "PUT")
     end
 
