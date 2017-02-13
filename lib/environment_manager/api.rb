@@ -69,7 +69,7 @@ module EnvironmentManager
         token = api_auth()
         base_url = "https://#{@server}"
         request_url = "#{base_url}#{query_endpoint}"
-        query_headers = {"Accept": "application/json", "Content-Type": "application/json", "Authorization": token}
+        query_headers = {"Accept" => "application/json", "Content-Type" => "application/json", "Authorization" => token}
         headers.each do |header|
           query_headers.merge!(header)
         end
@@ -423,7 +423,7 @@ module EnvironmentManager
       if expected_version.nil?
         headers = ""
       else
-        headers = {"expected-version": expected_version}
+        headers = {"expected-version" => expected_version}
       end
       request_endpoint = "/api/v1/deployment-maps/#{deployment_name}"
       return query(request_endpoint, query_type: "PUT", headers: headers, data: data)
@@ -506,7 +506,7 @@ module EnvironmentManager
       if expected_version.nil?
         headers = nil
       else
-        headers = {"expected-version": expected_version}
+        headers = {"expected-version" => expected_version}
       end
       request_endpoint = "/api/v1/environments/#{environment}/schedule"
       return query(request_endpoint, query_type: "PUT", headers: headers, data: data)
@@ -590,7 +590,7 @@ module EnvironmentManager
       if expected_version.nil?
         headers = ""
       else
-        headers = {"expected-version": expected_version}
+        headers = {"expected-version" => expected_version}
       end
       request_endpoint = "/api/v1/config/environments/#{environment}"
       return query(request_endpoint, query_type: "PUT", headers: headers, data: data)
@@ -640,7 +640,7 @@ module EnvironmentManager
       if expected_version.nil?
         headers = ""
       else
-        headers = {"expected-version": expected_version}
+        headers = {"expected-version" => expected_version}
       end
       request_endpoint = "/api/v1/config/environment-types/#{environmenttype}"
       return query(request_endpoint, query_type: "PUT", headers: headers, data: data)
@@ -766,7 +766,7 @@ module EnvironmentManager
       if expected_version.nil?
         headers = ""
       else
-        headers = {"expected-version": expected_version}
+        headers = {"expected-version" => expected_version}
       end
       request_endpoint = "/api/v1/config/lb-settings/#{environment}/#{vhostname}"
       return query(request_endpoint, query_type: "PUT", headers: headers, data: data)
@@ -819,7 +819,7 @@ module EnvironmentManager
       if expected_version.nil?
         headers = ""
       else
-        headers = {"expected-version": expected_version}
+        headers = {"expected-version" => expected_version}
       end
       request_endpoint = "/api/v1/notification-settings/#{notification_id}"
       return query(request_endpoint, query_type: "PUT", headers: headers, data: data)
@@ -891,7 +891,7 @@ module EnvironmentManager
       if expected_version.nil?
         headers = ""
       else
-        headers = {"expected-version": expected_version}
+        headers = {"expected-version" => expected_version}
       end
       request_endpoint = "/api/v1/config/permissions/#{name}"
       return query(request_endpoint, query_type: "PUT", headers: headers, data: data)
@@ -1043,7 +1043,7 @@ module EnvironmentManager
       if expected_version.nil?
         headers = ""
       else
-        headers = {"expected-version": expected_version}
+        headers = {"expected-version" => expected_version}
       end
       request_endpoint = "/api/v1/config/services/#{service}/#{cluster}"
       return query(request_endpoint, query_type: "POST", data: data, headers: headers)
@@ -1165,7 +1165,7 @@ module EnvironmentManager
       if expected_version.nil?
         headers = ""
       else
-        headers = {"expected-version": expected_version}
+        headers = {"expected-version" => expected_version}
       end
       request_endpoint = "/api/v1/config/upstreams/#{upstream}"
       return query(request_endpoint, query_type: "PUT", headers: headers, data: data)
