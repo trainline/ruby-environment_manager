@@ -58,7 +58,7 @@ module EnvironmentManager
       if query_endpoint.to_s.strip.empty? or data.to_s.strip.empty?
         raise("No endpoint specified, cannot continue")
       end
-      if query_endpoint.downcase == "post" or query_endpoint.downcase == "put"
+      if query_endpoint.downcase == "post"
         if data.nil?
           raise("We need data for this method but nothing was specified")
         end
