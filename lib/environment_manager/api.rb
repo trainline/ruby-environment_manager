@@ -23,16 +23,16 @@ module EnvironmentManager
     def api_auth()
       # Authenticate in environment manager
       base_url = "https://#{@server}"
-      token_payload = {grant_type: "password",
-                       username: @user,
+      token_payload = {username: @user,
                        password: @password}
       token = nil
       no_token = true
       retries = 0
       while no_token and retries < @retries
-        em_token_url = "#{base_url}/api/token"
+        em_token_url = "#{base_url}/api/v1/token"
+        headers = {"Accept" => "application/json", "Content-Type" => "application/json"}
         begin
-          em_token = RestClient::Request.execute(url: em_token_url, method: :post, payload: token_payload, verify_ssl: false, open_timeout: 10)
+          em_token = RestClient::Request.execute(url: em_token_url, method: :post, payload: JSON.generate(token_payload), headers: headers, verify_ssl: false, open_timeout: 10)
           if em_token.code == 200
             token = em_token.body
             no_token = false
