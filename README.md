@@ -7,6 +7,8 @@ Ruby client library for [Environment Manager](https://github.com/trainline/envir
 Normal use of the Client
 
 ```
+require 'environment-manager'
+
 em_session = new = EnvironmentManager::Api.new(server,user,password)
 results = em_session.get_upstreams_config()
 ```
