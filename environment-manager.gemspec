@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.summary               = 'Ruby client for Environment Manager'
   gem.description           = %q{ Ruby client that supports all API endpoints for Environment Manager }
   gem.license               = 'Apache-2.0'
-  gem.version               = '0.1.2'
+  gem.version               = '0.1.3'
   gem.required_ruby_version = '>= 1.9.2'
   gem.files                 = Dir['{lib}/**/*']
   gem.require_paths         = %w[ lib ]
