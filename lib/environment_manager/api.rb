@@ -87,9 +87,10 @@ module EnvironmentManager
         else
           raise("Cannot process query type #{query_type}")
         end
-        if request.code.to_s[0].to_i == 2
+        status_type = request.code.to_s[0].to_i
+        if status_type == 2 or status_type == 3
           return JSON.parse(request.body)
-        elsif request.code.to_s[0].to_i == 2 or request.code.to_s[0].to_i == 5
+        elsif status_type == 4
           raise(request)
         else
           sleep backoff
