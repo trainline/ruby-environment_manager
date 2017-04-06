@@ -43,6 +43,7 @@ module EnvironmentManager
           sleep 2
         end
         retries += 1
+        sleep 2
       end
       if not token.to_s.strip.empty?
         token_bearer = "Bearer #{token}"
