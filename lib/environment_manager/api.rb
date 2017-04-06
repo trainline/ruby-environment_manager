@@ -681,9 +681,19 @@ module EnvironmentManager
 
     ## Instance
     public
-    def get_instances()
+    def get_instances(environment=nil, cluster=nil)
       # Get all instances matching the given criteria
       request_endpoint = "/api/v1/instances"
+      queries = Array.new()
+      if environment != nil
+        queries.push("environment=#{environment}")
+      end
+      if cluster != nil
+        queries.push("cluster=#{cluster}")
+      end
+      if queries.size > 0
+        request_endpoint << '?%s' % queries.join("&")
+      end
       return query(request_endpoint, query_type: "GET")
     end
 
