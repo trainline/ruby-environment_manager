@@ -758,7 +758,7 @@ module EnvironmentManager
       if id.nil?
         raise("Load Balancer ID has not been specified")
       end
-      request_endpoint = "/api/v1/config/load-balancer/#{id}"
+      request_endpoint = "/api/v1/load-balancer/#{id}"
       return query(request_endpoint, query_type: "GET")
     end
 
