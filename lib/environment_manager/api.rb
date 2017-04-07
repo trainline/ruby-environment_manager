@@ -57,7 +57,7 @@ module EnvironmentManager
 
     private
     def get_token
-      if @token == nil
+      if @token.nil?
         @token = api_auth()
       end
       return @token
@@ -107,11 +107,9 @@ module EnvironmentManager
           status_type = request.code.to_s[0].to_i
           if status_type == 2 or status_type == 3
             return JSON.parse(request.body)
-          elsif status_type == 4
-            if request.code == 401
+          elsif request.code == 401
               renew_token()
-              raise("Trying to renew token")
-            end
+          elsif status_type == 4
             raise(request)
           else
             sleep backoff
