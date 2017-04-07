@@ -13,6 +13,8 @@ module EnvironmentManager
       @user = user
       @password = password
       @retries = retries
+      @token = nil
+
       # Sanitise input
       if server.empty? or user.empty? or password.empty?
         raise(IndexError, "API(server: SERVERNAME, user: USERNAME, password: PASSWORD, [retries: N])")
@@ -43,6 +45,7 @@ module EnvironmentManager
           sleep 2
         end
         retries += 1
+        sleep 2
       end
       if not token.to_s.strip.empty?
         token_bearer = "Bearer #{token}"
@@ -50,6 +53,19 @@ module EnvironmentManager
       else
         raise("No token returned from Environment Manager")
       end
+    end
+
+    private
+    def get_token
+      if @token == nil
+        @token = api_auth()
+      end
+      return @token
+    end
+
+    private
+    def renew_token
+      @token = api_auth()
     end
 
     private
@@ -66,7 +82,7 @@ module EnvironmentManager
       retry_num = 0
       while retry_num < retries
         retry_num += 1
-        token = api_auth()
+        token = get_token()
         base_url = "https://#{@server}"
         request_url = "#{base_url}#{query_endpoint}"
         query_headers = {"Accept" => "application/json", "Content-Type" => "application/json", "Authorization" => token}
@@ -74,26 +90,34 @@ module EnvironmentManager
           query_headers.merge!(header)
         end
         # Add any extra headers
-        if query_type.downcase == "get"
-          request = RestClient::Request.execute(url: request_url, method: :get, headers: query_headers, verify_ssl: false, open_timeout: 10)
-        elsif query_type.downcase == "post"
-          request = RestClient::Request.execute(url: request_url, method: :post, payload: data, headers: query_headers, verify_ssl: false, open_timeout: 10)
-        elsif query_type.downcase == "put"
-          request = RestClient::Request.execute(url: request_url, method: :put, payload: data, headers: query_headers, verify_ssl: false, open_timeout: 10)
-        elsif query_type.downcase == "patch"
-          request = RestClient::Request.execute(url: request_url, method: :patch, payload: data, headers: query_headers, verify_ssl: false, open_timeout: 10)
-        elsif query_type.downcase == "delete"
-          request = RestClient::Request.execute(url: request_url, method: :delete, headers: query_headers, verify_ssl: false, open_timeout: 10)
-        else
-          raise("Cannot process query type #{query_type}")
-        end
-        status_type = request.code.to_s[0].to_i
-        if status_type == 2 or status_type == 3
-          return JSON.parse(request.body)
-        elsif status_type == 4
-          raise(request)
-        else
-          sleep backoff
+        begin
+          if query_type.downcase == "get"
+            request = RestClient::Request.execute(url: request_url, method: :get, payload: data, headers: query_headers, verify_ssl: false, open_timeout: 10)
+          elsif query_type.downcase == "post"
+            request = RestClient::Request.execute(url: request_url, method: :post, payload: data, headers: query_headers, verify_ssl: false, open_timeout: 10)
+          elsif query_type.downcase == "put"
+            request = RestClient::Request.execute(url: request_url, method: :put, payload: data, headers: query_headers, verify_ssl: false, open_timeout: 10)
+          elsif query_type.downcase == "patch"
+            request = RestClient::Request.execute(url: request_url, method: :patch, payload: data, headers: query_headers, verify_ssl: false, open_timeout: 10)
+          elsif query_type.downcase == "delete"
+            request = RestClient::Request.execute(url: request_url, method: :delete, headers: query_headers, verify_ssl: false, open_timeout: 10)
+          else
+            raise("Cannot process query type #{query_type}")
+          end
+          status_type = request.code.to_s[0].to_i
+          if status_type == 2 or status_type == 3
+            return JSON.parse(request.body)
+          elsif status_type == 4
+            if request.code == 401
+              renew_token()
+              raise("Trying to renew token")
+            end
+            raise(request)
+          else
+            sleep backoff
+          end
+        rescue
+          renew_token()
         end
       end
       raise("Max number of retries (#{retry_num}) querying Environment Manager, last http code is #{request.code}, will abort for now")
@@ -681,9 +705,19 @@ module EnvironmentManager
 
     ## Instance
     public
-    def get_instances()
+    def get_instances(environment=nil, cluster=nil)
       # Get all instances matching the given criteria
       request_endpoint = "/api/v1/instances"
+      queries = Array.new()
+      if environment != nil
+        queries.push("environment=#{environment}")
+      end
+      if cluster != nil
+        queries.push("cluster=#{cluster}")
+      end
+      if queries.size > 0
+        request_endpoint << '?%s' % queries.join("&")
+      end
       return query(request_endpoint, query_type: "GET")
     end
 
@@ -724,7 +758,7 @@ module EnvironmentManager
       if id.nil?
         raise("Load Balancer ID has not been specified")
       end
-      request_endpoint = "/api/v1/config/load-balancer/#{id}"
+      request_endpoint = "/api/v1/load-balancer/#{id}"
       return query(request_endpoint, query_type: "GET")
     end
 
