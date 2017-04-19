@@ -703,15 +703,18 @@ module EnvironmentManager
 
     ## Instance
     public
-    def get_instances(environment=nil, cluster=nil)
+    def get_instances(environment=nil, cluster=nil, account=nil)
       # Get all instances matching the given criteria
       request_endpoint = "/api/v1/instances"
       queries = Array.new()
-      if environment != nil
+      if not environment.nil?
         queries.push("environment=#{environment}")
       end
-      if cluster != nil
+      if not cluster.nil?
         queries.push("cluster=#{cluster}")
+      end
+      if not account.nil?
+        queries.push("account=#{account}")
       end
       if queries.size > 0
         request_endpoint << '?%s' % queries.join("&")
@@ -1146,12 +1149,12 @@ module EnvironmentManager
 
     ## Upstream
     public
-    def get_upstream_slices(upstream=nil)
+    def get_upstream_slices(upstream=nil, environment=nil)
       # Get slices for a given upstream
-      if upstream.nil?
-        raise("Upstream name has not been specified")
+      if upstream.nil? or environment.nil?
+        raise("Upstream or Environment name has not been specified")
       end
-      request_endpoint = "/api/v1/upstreams/#{upstream}/slices"
+      request_endpoint = "/api/v1/upstreams/#{upstream}/slices?environment=#{environment}"
       return query(request_endpoint, query_type: "GET")
     end
 
