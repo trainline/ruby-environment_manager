@@ -1146,12 +1146,12 @@ module EnvironmentManager
 
     ## Upstream
     public
-    def get_upstream_slices(upstream=nil)
+    def get_upstream_slices(upstream=nil, environment=nil)
       # Get slices for a given upstream
-      if upstream.nil?
-        raise("Upstream name has not been specified")
+      if upstream.nil? or environment.nil?
+        raise("Upstream or Environment name has not been specified")
       end
-      request_endpoint = "/api/v1/upstreams/#{upstream}/slices"
+      request_endpoint = "/api/v1/upstreams/#{upstream}/slices?environment=#{environment}"
       return query(request_endpoint, query_type: "GET")
     end
 
