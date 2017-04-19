@@ -707,13 +707,13 @@ module EnvironmentManager
       # Get all instances matching the given criteria
       request_endpoint = "/api/v1/instances"
       queries = Array.new()
-      if environment != nil
+      if not environment.nil?
         queries.push("environment=#{environment}")
       end
-      if cluster != nil
+      if not cluster.nil?
         queries.push("cluster=#{cluster}")
       end
-      if account != nil
+      if not account.nil?
         queries.push("account=#{account}")
       end
       if queries.size > 0
