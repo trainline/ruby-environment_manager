@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |gem|
   gem.name                  = 'environment-manager'
-  gem.authors               = [ "Marc Cluet" ]
+  gem.authors               = [ "Marc Cluet", "Raza Jhaveri" ]
   gem.email                 = 'marc.cluet@thetrainline.com'
   gem.homepage              = 'https://github.com/trainline/ruby-environment_manager'
   gem.summary               = 'Ruby client for Environment Manager'
