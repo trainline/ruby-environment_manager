@@ -764,7 +764,7 @@ module EnvironmentManager
     end
 
     public
-    def get_lbsettings_config()
+    def get_lbsettings_config(query_type=nil, query_value=nil)
       # List all load balancer settings
       request_endpoint = "/api/v1/config/lb-settings"
       return query(request_endpoint, query_type: "GET")
@@ -1169,7 +1169,7 @@ module EnvironmentManager
     end
 
     public
-    def get_upstreams_config()
+    def get_upstreams_config(query_type=nil, query_value=nil)
       # Get all upstream configurations
       request_endpoint = "/api/v1/config/upstreams"
       return query(request_endpoint, query_type: "GET")
