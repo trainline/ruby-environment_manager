@@ -4,5 +4,3 @@
 .rvmrc
 Gemfile.lock
 *.gem
-*.swp
-*.swo
