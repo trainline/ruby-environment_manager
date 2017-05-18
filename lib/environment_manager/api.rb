@@ -764,9 +764,15 @@ module EnvironmentManager
     end
 
     public
-    def get_lbsettings_config()
+    def get_lbsettings_config(query_type=nil, query_value=nil)
       # List all load balancer settings
-      request_endpoint = "/api/v1/config/lb-settings"
+      if query_type.nil? or query_value.nil?
+        raise('query_type and query_value are required')
+      end
+      if !query_value.kind_of?(Array)
+        raise('query_value must be an array')
+      end
+      request_endpoint = "/api/v1/config/lb-settings?qa=#{query_type}&qv=#{query_value.join(',')}"
       return query(request_endpoint, query_type: "GET")
     end
 
@@ -1169,9 +1175,15 @@ module EnvironmentManager
     end
 
     public
-    def get_upstreams_config()
-      # Get all upstream configurations
-      request_endpoint = "/api/v1/config/upstreams"
+    def get_upstreams_config(query_type=nil, query_value=nil)
+    # Get all upstream configurations
+      if query_type.nil? or query_value.nil?
+        raise('query_type and query_value are required')
+      end
+      if !query_value.kind_of?(Array)
+        raise('query_value must be an array')
+      end
+      request_endpoint = "/api/v1/config/upstreams?qa=#{query_type}&qv=#{query_value.join(',')}"
       return query(request_endpoint, query_type: "GET")
     end
 
